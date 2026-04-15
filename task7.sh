@@ -12,6 +12,6 @@
 source /dtu/projects/02613_2025/conda/conda_init.sh
 conda activate 02613_2026
 
-python task7.py 10
+python task7.py 20
 
 # the command line argument is how many building floorplans to process.

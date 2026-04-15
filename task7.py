@@ -21,7 +21,7 @@ def jacobi_jit(u, interior_mask, max_iter, atol=1e-6):
     for _ in range(max_iter):
         delta = 0.0
         
-        # Explicit cache-friendly loops (Outer: row, Inner: col)
+        # Explicit cache-friendly loops (outer: row, inner: col)
         for i in range(1, rows - 1):
             for j in range(1, cols - 1):
                 if interior_mask[i-1, j-1]: 
@@ -88,11 +88,11 @@ if __name__ == '__main__':
     MAX_ITER = 20_000
     ABS_TOL = 1e-4
 
-    # --- FIXED: WARM-UP RUN ---
+    # CHANGE: warm-up run (the first run will include JIT compilation time and will therefore be slower, we will exclude this time)
     print("Compiling Numba function (Warm-up)...", file=sys.stderr)
     _ = jacobi_jit(all_u0[0], all_interior_mask[0], 2, ABS_TOL)
 
-    # --- REAL TIMING START ---
+    # CHANGE: real timing starts here
     t0 = time.time()
 
     all_u = np.empty_like(all_u0)
@@ -100,6 +100,7 @@ if __name__ == '__main__':
         u = jacobi_jit(u0, interior_mask, MAX_ITER, ABS_TOL)
         all_u[i] = u
     
+    # CHANGE: real timing ends here
     t1 = time.time()
     print(f"Pure Numba Time: {t1 - t0:.4f} seconds", file=sys.stderr)
 
