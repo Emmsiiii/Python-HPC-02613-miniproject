@@ -62,6 +62,7 @@ if __name__ == '__main__':
     else:
         N = int(sys.argv[1])
         n_proc = int(sys.argv[2])
+        chunk_size =  int(sys.argv[3])
     building_ids = building_ids[:N]
 
     # Load floor plans
@@ -81,7 +82,6 @@ if __name__ == '__main__':
         args.append((all_u0[i], all_interior_mask[i]))
     
       
-    chunk_size = N//n_proc  
     pool = multiprocessing.Pool(n_proc)
     results_async = [pool.apply_async(process_batch, (args[i:i + chunk_size],))
                     for i in range(0,N,chunk_size)]   
